@@ -1,0 +1,24 @@
+Pim.txt
+
+PIM = Personal Information Manager
+
+I need a) mail with pop3 b) contacts c) organizer with birthday and todo reminders (can be a separate app)
+
+1. Kontact=Frontend Akonadi=Backend
+
+I blocked akonadi-backend-mysql above, because it cannot downscale to 1 GB of total memory (year 2017).
+I got "database reported transaction deadlock" with Sqlite3. I think the culprit was akonadi_indexing_agent (year 2017).
+Kaddressbook crashed immediately on start "QSocketNotifier: Invalid socket 16 and type 'Read', disabling". The problem seemed to be in 32-bit environment. I had armhf (year 2017)
+ https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=831899
+  https://bugs.kde.org/show_bug.cgi?id=358696
+  https://bugs.kde.org/show_bug.cgi?id=365944
+
+To use Sqlite3:
+# nano -w /home/xxxxx/.config/akonadi/akonadiserverrc   // Change the "xxxxx" to your user name
+ [%General]
+ Driver=QSQLITE3
+ [QSQLITE3]
+ Name=/home/xxxxx/.local/share/akonadi/akonadi.db   // Change the "xxxxx" to your user name
+
+2. Kube=Frontend Sink=Backend
+ Not released yet.

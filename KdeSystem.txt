@@ -1,0 +1,120 @@
+KdeSystem.txt
+
+1. You should be in Debian MainSystem and you will be in the Console (cli interface)
+
+2. Check for network
+2.1 # ping nokia.com
+2.2 If no network
+ 2.2.1 ls /sys/class/net/   // Pick the word enx*
+ 2.2.2 # nano -w /etc/network/interfaces.d/mylan
+ auto enx*  // Insert the word enx*
+ iface enx* inet dhcp   // Insert the workd enx*
+2.3 # shutdown -r now
+2.4 # ping nokia.com    // ping should work!
+
+3. Configure
+# nano -w /etc/apt/preferences.d/akonadi.pref
+ # Block Mysql in Akonadi
+ Package: akonadi-backend-mysql
+ Pin: release *
+ Pin-Priority: -1
+
+4. Debian maintenance
+4.1 # cd
+4.2 # apt-get update
+4.3 # apt-get upgrade
+4.4 # apt-get dist-upgrade
+
+5. Install
+5.1 # apt-get install kde-full  // Check the list   // 1849 newly installed packages, 1265 MB of archives   // Duration: Transfer (2 MB/s) 1,5 hour + install 1-2 hours
+5.2 # apt-get install calligra  // Duration 1-6 minutes
+5.3 # apt-get install ktorrent mesa-utils   // Duration 15 seconds
+5.4 # apt-get install falkon
+5.5 # rm /etc/network/interfaces.d/mylan    // Remove, if we created the file above. We should create Lan and Wlan in Kde below.
+
+6. Restart
+6.1 # shutdown -r now
+6.2 You will get SDDM login. Login with your user.  // Not the root
+6.3 Have patience the first time and wait.  // Duration 3 minutes for initialization.
+6.4 Welcome to Kool Desktop Environment (KDE)!
+
+7 Kde settings
+7.1 Start, Application, Settings, System Settings, Input Devices, Mouse // I choose "Left handed" (Right handed at job)
+7.2 Start, Application, Settings, System Settings, Desktop Behavior, Screen Locking, Lock screen automatically after: 5 mins -> Uncheck the box // Otherwise, I was unable to unlock after 5 minutes
+7.3 Right click on the clock to the right. Digital Clock Settings, Time Zones   // I choose Mariehamn (you choose yours) and Uncheck UTC.
+
+8. Check for error
+8.1 # tail -f /var/log/syslog
+lircd-0.10.0[534]: Error: Cannot glob /sys/class/rc/rc0/input[0-9]*/event[0-9]*
+ 8.1.1 # systemctl list-units|grep -i lir
+ 8.1.2 # systemctl stop lircmd
+ 8.1.3 # systemctl stop lircd.service
+ 8.1.4 # systemctl stop lircd.socket
+ 8.1.5 # systemctl disable lircmd
+ 8.1.6 # systemctl disable lircd.service
+ 8.1.7 # systemctl disable lircd.socket
+
+9. Check for failed for Parallel printer driver modules
+9.1 # grep "Failed to find module" /var/log/syslog
+ systemd-modules-load[188]: Failed to find module 'lp'
+ systemd-modules-load[188]: Failed to find module 'ppdev'
+ systemd-modules-load[188]: Failed to find module 'parport_pc'
+9.2 # nano -w /etc/modules-load.d/cups-filters.conf
+ #lp
+ #ppdev
+ #parport_pc
+
+10. Check of graphics
+10.1 Start konsole  // Cli interface
+10.2 $ glxinfo | grep rendering // Result: Yes
+10.3 $ xrandr   // Result: 1920x1080     60.00*+
+10.4 $ glxgears -info   // Result: 301 frames in 5.0 seconds = 60.019 FPS
+
+11. Check of unattended-upgrades
+11.1 unattended-upgrades a) demand to much resources, and b) I want to handle upgrades because I am in sid release
+11.2 # nano -w /etc/apt/apt.conf.d/20auto-upgrades
+ APT::Periodic::Update-Package-Lists "0";   // Changed 1 to 0
+ APT::Periodic::Unattended-Upgrade "0"; // Changed 1 to 0
+
+12. Check of Lan network
+12.1 Start, Application, Settings, System Settings, Network, Connections
+ You should have Wired Ethernet: Wired connection 1 // If you do not have, click on Plus sign and fix one.
+
+13. Check of Wlan network
+13.1 Your modem, Enable wlan
+13.2 Choose System Settings, Network, Connections, Click on Plus sign, Wi-Fi, Create,
+ 13.2.1 Choose IPv6
+  Method: Ignored
+ 13.2.2 Choose IPv4
+  Method: Automatic
+ Click "IPv4 is required for this connection"
+ 13.2.3 Choose Wi-Fi Securiy
+  Security: None    // Default: WPA/WPA2 Personal
+  Password: // From modem: WPA Pre-Shared Key
+  Store password for this user only (encrypted)
+ 13.2.4 Choose Wi-Fi
+  SSID: Inteno_CC (52%), WPA-PSK, Frequency 2462 Mhz (or Inteno_857A (34%), WPA2-PSK, Frequency 2462 Mhz)
+  Mode: Infrastructure
+  BSSID: A8:A8:A8:A8:A8:A8
+  Restrict to device: wlan0 (B9:B9:B9:B9:B9:B9)
+  Cloned MAC address:
+  MTU:
+ 13.2.5 Choose General configuration
+  Uncheck "Automatically connect to this network when it is available" 
+  Uncheck "All users may connect to this connection"
+13.3 Save
+
+14. Check of Bluetooth
+ ToDo!
+
+15. Falcon web browser settings
+ 15.1 Settings icon, Preferences, General, Launching, After launch, Restore session -> Open homepage
+
+16. Falcon and Konqueror web browser crash  // You use Debian flavour "armhf"   // Debian bug 897925
+ 16.1 $ falkon %u   // Failed to load /usr/bin/libGLESv2.so: /usr/bin/libGLESv2.so: cannot open shared object file: No such file or directory
+ 16.2 # ln -s /usr/lib/arm-linux-gnueabihf/libGLESv2.so /usr/bin/libGLESv2.so   // You need to be aware of this link and remove the link when the bug is fixed
+ 16.3 # ln -s /usr/lib/arm-linux-gnueabihf/libEGL.so /usr/bin/libEGL.so // You need to be aware of this link and remove the link when the bug is fixed
+ 16.4 $ falkon %u   // It works
+ 
+17. Shutdown
+ Shutdown and let it use the 30 seconds to shutdown i.e. do not click OK.

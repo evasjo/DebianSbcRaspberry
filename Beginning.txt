@@ -1,0 +1,58 @@
+Beginning.txt
+
+Debian release:
+I have chosen Debian release "sid". The release choice is "stable", "testing" or "unstable", or the codename for them. See https://www.debian.org/releases/  . If you want another release choice than "sid", read comments carefully below during installation and change from "sid" to your choice.
+
+Debian flavour:
+I have chosen Debian flavour "arm64". With SoC BCM2837, you can choose between "arm64" and "armhf". If you want "armhf", read comments carefully below during installation and change from "arm64".
+With SoC BCM2836, you have to choose "armhf".
+
+Debian kernel:
+The Debian kernels used below are linux-image-arm64 or linux-image-armmp.
+If you want to test linux-image-armmp-lpae or a specific version of armmp-lpae, be aware of Debian bug 884601. The last version of linux-image-armmp-lpae which worked was 4.13 according to Debian bug 884601.
+
+Sd card knowledge:
+Do not take out the sd card while the SBC is on.
+Avoid if possible to switch off the electricty to the SBC while the SBC is running.
+If the Gui is locked, try Ctrl+Alt+F2 login as root and "shutdown -r now" to restart.
+
+
+Hardware:
+Installation computer               // Required // I use Rpi2 "BCM2836" Raspbian with 8GB, you can use any computer
+Power cable                         // Required 
+Network connection (Ethernet cable) // Required // If you choose "arm64", you need one for your computer and another one for PreSystem
+A Raspberry Pi 3                    // Required // or Pi 2
+Monitor, keyboard and mouse         // Required
+HDMI cable                          // Required // My is HDMI->DVI adapter cable
+>=2A micro USB power supply         // Required // I have 2.4A
+Micro Usb power cable               // Required
+Micro SD card for PreSystem         // Required // My is 16GB, you can use smaller
+Micro SD card (Class 10) for MainSystem // Required // My is 64GB "a fast card"
+Usb Sd card holder (reader)         // Required
+120 GB Usb Flash Data/Backup        // Optional // Data/Backup, rsync between and alternate
+120 GB Usb Flash Data/Backup        // Optional // Data/Backup, rsync between and alternate
+Usb Audio device                    // Optional	// See photo of my audio device, 20180520_205531.jpg
+Headphones or speakers              // Optional
+Usb hub                             // Optional // My is 7 ports with Multiple Transaction Translator (MTT)
+
+
+Installation steps for arm64:
+
+A. Your computer: Install PreSystem on a card
+    |
+B. Raspberry Pi: Start PreSystem (stapelberg)
+    |
+C. Your computer: ssh into PreSystem (Raspberry Pi), install MainSystem on a card
+    |
+B. Raspberry Pi: Start MainSystem
+
+
+Installation steps for armhf:
+
+A. Your computer: Install PreSystem (Raspbian) on a card. Shutdown your computer after that.
+    |
+B. Raspberry Pi: Start PreSystem (Raspbian)
+    |
+C. Raspberry Pi: Install MainSystem on a card
+    |
+B. Raspberry Pi: Start MainSystem

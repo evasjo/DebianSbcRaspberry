@@ -1,0 +1,270 @@
+BaseSystem.txt
+
+# = root privileges
+$ = regular non-privileged user
+// = notification for you to do the installation
+Copy the text from the first character after "$" or "#" sign and before "//", paste in a console in the rpi.
+Rows begin with initial space for better readability and you should not copy the inital space. You should copy from the first character.
+Be on alert with text string: sdx, xx, xxxxx, xxyy, yyyyy, Xxxxx, Yyyyy // They need to be replaced
+
+Alternative I: You want arm64 i.e you have SoC BCM2837
+1. Install PreSystem with your computer
+1.1 Start Terminal (cli interface)
+1.2. $ wget https://people.debian.org/~stapelberg/raspberrypi3/2018-01-08/2018-01-08-raspberry-pi-3-buster-PREVIEW.img.xz   // Look for the latest: https://wiki.debian.org/RaspberryPi3 and https://people.debian.org/~stapelberg/raspberrypi3
+1.3. $ ls -l /dev/disk/by-label
+1.4. $ cat /proc/partitions | grep sd
+1.5. Put the empty PreSystem sd card in a usb holder and in a usb slot in the computer.
+1.6. $ ls -l /dev/disk/by-label // Check with mount command, if mounted do umount.
+1.7. $ cat /proc/partitions | grep sd   // From the result, identify the card for the below sdx change. Very important that you choose the right card below.
+1.8. $ su root
+1.9. # xzcat 2018-01-08-raspberry-pi-3-buster-PREVIEW.img.xz | dd of=/dev/sdx bs=64k oflag=dsync status=progress    // "sdx", change the x to the very right character
+1.10. # sync
+1.11. # exit    // exit su
+
+2. PreSystem
+2.1 Pull out the PreSystem sd card from the usb holder and put the card in the rpi3
+2.2 You only need to connect the power cable and Ethernet cable to the rpi3.
+2.3 Start the rpi3 computer
+2.4 $ ssh root@rpi3 // error "not resolve hostname" then to get IpNumber a) "ifconfig" for broadcast address b) "ping -b BroadcastAddress" c) "arp -a" d) "ssh root@IpNumber"
+2.5 Password is “raspberry”
+2.6 # passwd    // Change root password in PreSystem
+Jump to "3. Install necessary packages in PreSystem"
+
+Alternative II: You want armhf i.e you have SoC BCM2836 or BCM2837
+1. Install PreSystem with your computer
+1.1 Start Terminal (cli interface)
+1.2 Download "Raspbian Stretch with desktop" (Torrent) from https://www.raspberrypi.org/downloads/raspbian/
+1.2.1 $ sha256sum "FileName".zip
+1.2.1 $ unzip "FileName".zip
+1.3. $ ls -l /dev/disk/by-label
+1.4. $ cat /proc/partitions | grep sd
+1.5. Put the empty PreSystem sd card in a usb holder and in a usb slot in the computer.
+1.6. $ ls -l /dev/disk/by-label // Check with mount command, if mounted do umount.
+1.7. $ cat /proc/partitions | grep sd   // From the result, identify the card for the below sdx change. Very important that you choose the right card below.
+1.8. $ su root
+1.9. # xzcat 2018-01-08-raspberry-pi-3-buster-PREVIEW.img.xz | dd of=/dev/sdx bs=64k oflag=dsync status=progress    // "sdx", change the x to the very right character
+1.9. # dd if="FileName".zip of=/dev/sdx bs=1048576  // Change "FileName" to right filename. "sdx", change the x to the very right character
+1.10. # sync
+1.11. # exit    // exit su
+
+2. PreSystem
+2.1 Pull out the PreSystem sd card from the usb holder and put the card in the rpi
+2.3 Start the rpi computer
+2.6 $ sudo passwd   // Change password in PreSystem
+2.7 $ su root
+Jump to "3. Install necessary packages in PreSystem"
+
+3. Install necessary packages in PreSystem
+3.1 # apt-get update
+3.2 # apt-get upgrade
+3.3 # apt-cache policy f2fs-tools
+ 3.3.1 # apt-get install f2fs-tools // If not installed
+3.4 # apt-cache policy debootstrap
+ 3.4.1 # apt-get install debootstrap    // If not installed
+3.5 # apt-cache policy psmisc
+ 3.5.1 # apt-get install psmisc // If not installed
+
+3.6 Check and eventually install f2fs-tools 
+ 3.6.1 # apt-cache policy f2fs-tools
+ 3.6.2 Put this in a browser: https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git    // Is this version long ahead, do a manual install below
+  3.6.2.1 # ls /usr/include/uuid/uuid.h // uuid-dev
+  3.6.2.2 # which pkg-config    // pkg-config
+  3.6.2.3 # which autoconf  // autoconf
+  3.6.2.4 # which libtool   // libtool
+  3.6.2.5 # apt-get install "packages which not exist, put space between packages"  // For example: apt-get install uuid-dev autoconf libtool
+  3.6.2.6 # git clone git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+  3.6.2.7 # cd f2fs-tools
+  3.6.2.8 # autoreconf -fi
+  3.6.2.9 # ./configure && make && make install
+  3.6.2.10 # cd ..
+
+4. MainSystem sd card (empty card=no partitions)
+4.1. # ls -l /dev/disk/by-label
+4.2. # cat /proc/partitions | grep sd
+4.3. Put the empty MainSystem sd card in a usb holder and in a usb slot in the rpi.
+4.4. # ls -l /dev/disk/by-label // The card should not be seen. If you see partitions you need to delete them in next chapter (3). Unmount the partitions.
+4.5. # cat /proc/partitions | grep sd   // From the result, identify the card for the below sdx change. Very important that you choose the right card below.
+4.6. # mount
+4.6. # umount /dev/sdx9 // Unmount MainSystem sd card partitions if mounted // Change the "x" to the very right character and "9" to right numbers
+
+5. Create partitions    // The comma "," means Enter command in this chapter, do not copy paste where you find comma character.
+5a. # fdisk /dev/sdx    // Change the "x" to the very right character
+5b. p   // Print partitions
+5c. d,, // Delete all partitions if there are
+5d. p   // Print partitions. You should not have any partitions when you go to the next row.
+5e. o,n,,,,+256M, a,t,6,    // Fix firmware partition (vfat)
+5f. n,,,,+256M, // Fix boot partition
+5g. n,,,,,  // Fix root partition
+5h. p   // Look that all is okay. You should have 3 partitions. After the next command you cannot reverse.
+5i. w   // Write everything to the sd card and exit
+
+6. Make filesystems
+6.1. # mkdosfs -n FIRMWARE /dev/sdx1 && sync    // Change the "x" to the very right character
+6.2. # mkfs.ext2 -L boot /dev/sdx2 && sync  // Change the "x" to the very right character
+6.3. # ./f2fs-tools/mkfs/mkfs.f2fs -l root /dev/sdx3 && sync    // Change the "x" to the very right character   // Not a manual install of f2fs-tools above, do: # mkfs.f2fs -l root /dev/sdx3 && sync
+
+7. Mount root
+7.1 # pwd
+7.2 # mkdir -v sdcard
+7.3 # mount -v -t f2fs -o sync /dev/sdx3 sdcard // Change the "x" to the very right character
+
+8. Install Debian base system to your sd card
+8.1 # debootstrap --arch=arm64 --include=kbd,locales,keyboard-configuration,console-setup,dphys-swapfile sid sdcard http://ftp.xx.debian.org/debian && sync // Change "xx" to right country code from http://www.debian.org/mirror/list // If you use armhf change arm64 to armhf   // If you use other release than sid change sid // Duration 40-60 minutes
+
+9. Mount all the rest
+9.1 # mount -v -t ext2 -o sync /dev/sdx2 sdcard/boot    // Change the "x" to the very right character
+9.2 # mkdir -v sdcard/boot/firmware
+9.3 # mount -v -t vfat -o sync /dev/sdx1 sdcard/boot/firmware   // Change the "x" to the very right character
+9.4 # mount -v proc sdcard/proc -t proc
+9.5 # mount -v sysfs sdcard/sys -t sysfs
+9.6 # mount -v --bind /dev/pts sdcard/dev/pts
+
+10. root password
+10.1 # chroot sdcard passwd root    // root password in MainSystem
+
+11. Setup files
+11.1 # nano -w sdcard/etc/apt/sources.list
+ deb http://ftp.xx.debian.org/debian sid main contrib non-free  // Change "xx" to right country code from http://www.debian.org/mirror/list // If you use other release than sid change sid // (Package firmware-brcm80211 below is from non-free)
+11.2 # nano -w sdcard/etc/dphys-swapfile
+ CONF_SWAPSIZE=1024
+11.3 # nano -w sdcard/etc/modules
+ f2fs
+ vc4
+
+12. Setup fstab
+12.1 # nano -w sdcard/etc/fstab
+ #<file system>  <dir>          <type>   <options>       <dump>  <pass>
+ proc            /proc           proc    defaults          0       0
+ /dev/mmcblk0p1  /boot/firmware  vfat    noauto,noatime    0       2
+ /dev/mmcblk0p2  /boot           ext2    defaults,noatime  0       0
+ /dev/mmcblk0p3  /               f2fs    defaults,noatime  0       0
+ /dev/sda1       /xxyy           f2fs    defaults,noatime  0       0    // Optional. Usb memory for data. xx = 2 of you first letters in firstname, yy = 2 of you first letters in lastname
+12.2 # mkdir sdcard/xxyy    // Optional. Usb memory for data. xx = 2 of you first letters in firstname, yy = 2 of you first letters in lastname
+
+13. Diverse settings
+13.1 # nano -w sdcard/etc/timezone  // The computer use UTC and we use another in Gui later
+ Etc/UTC
+13.2 # nano -w sdcard/etc/locale.gen    // I uncomment below, you uncomment yours
+ en_DK.UTF-8 UTF-8
+ en_GB.UTF-8 UTF-8
+ sv_FI.UTF-8 UTF-8
+13.3 # nano -w sdcard/etc/default/keyboard  // I had the configuration below, you make your configuration
+ XKBMODEL="pc105"                                                                                                                                                                                                                                                               
+ XKBLAYOUT="fi"                                                                                                                                                                                                                                                                 
+ BACKSPACE="guess"
+13.4 # nano -w sdcard/etc/hostname  // I had this configuration
+ yyyyy  // Change the "yyyyy" to your hostname
+
+14. Configure
+14.1 # chroot sdcard dpkg-reconfigure -f noninteractive locales
+14.2 # chroot sdcard locale-gen LANG=$(fgrep "=" /etc/default/locale | cut -f 2 -d '=')
+14.3 # chroot sdcard dpkg-reconfigure -f noninteractive tzdata
+14.4 # chroot sdcard dpkg-reconfigure -f noninteractive keyboard-configuration
+14.5 # chroot sdcard dpkg-reconfigure -f noninteractive console-setup
+
+15. Setup user
+15.1 # chroot sdcard adduser xxxxx  // Change the "xxxxx" to your whole first name in lower-case    // Then asked for Full name = Xxxxx Yyyyy
+15.2 # chroot sdcard adduser xxxxx audio    // Change the "xxxxx" to your whole first name in lower-case
+15.3 # chroot sdcard adduser xxxxx video    // Change the "xxxxx" to your whole first name in lower-case
+
+16. Install kernel
+16.1 # chroot sdcard apt-get update
+16.2 # chroot sdcard apt-get upgrade
+16.3 # chroot sdcard apt-get dist-upgrade
+16.4 # chroot sdcard apt-get install linux-image-arm64 hardlink // If you use armhf change arm64 to armmp   // Duration 10-30 minutes.
+16.5 # nano -w sdcard/etc/initramfs-tools/modules
+ crc32
+ crc32c
+ f2fs
+16.6 # chroot sdcard update-initramfs -u
+16.7 # cp -p sdcard/boot/vmlinuz-$(readlink sdcard/vmlinuz | grep vmlinuz | cut -d "-" -f2,3)-arm64 sdcard/boot/firmware/   // If you use armhf change arm64 to armmp
+16.8 # cp -p sdcard/boot/initrd.img-$(readlink sdcard/initrd.img | grep initrd.img | cut -d "-" -f2,3)-arm64 sdcard/boot/firmware/  // If you use armhf change arm64 to armmp
+16.9 # cp -p sdcard/usr/lib/linux-image-$(readlink sdcard/vmlinuz | grep vmlinuz | cut -d "-" -f2,3)-arm64/broadcom/bcm2837-rpi-3-b.dtb sdcard/boot/firmware/   // If you use armhf change arm64 to armmp   // If you use armhf and if you have BCM2837, change "broadcom/bcm2837-rpi-3-b.dtb" to "bcm2837-rpi-3-b.dtb". If you use armhf and if you have BCM2836, change "broadcom/bcm2837-rpi-3-b.dtb" to "bcm2836-rpi-2-b.dtb".
+
+17. Install diverse
+17.1 # chroot sdcard apt-get install dbus fake-hwclock psmisc
+17.2 # chroot sdcard apt-get install ntp mlocate rsync
+17.3 # chroot sdcard apt-get install f2fs-tools
+17.4 # chroot sdcard apt-get install firmware-brcm80211 // The built-in bluetooth/wlan chip for rpi3    // Do not install if you do not have the built-in bluetooth/wlan chip for rpi3
+17.5 # cp -p /lib/firmware/brcm/brcmfmac43430-sdio.txt sdcard/lib/firmware/brcm/brcmfmac43430-sdio.txt  // Board-specific configuration chip for rpi3   // Do not cp if you do not have the built-in bluetooth/wlan chip for rpi3
+17.6 # chroot sdcard apt-get autoremove
+17.7 # chroot sdcard apt-get autoclean
+17.8 # sync
+
+18. Install firmware
+18.1 # echo 'console=tty0 console=${serial} root=/dev/mmcblk0p3 rootfstype=f2fs elevator=deadline fsck.repair=yes rootwait cma=416M' > sdcard/boot/firmware/cmdline.txt
+18.2 # echo "arm_control=0x200" > sdcard/boot/firmware/config.txt   // This row only if you use arm64
+18.3 # echo "device_tree=bcm2837-rpi-3-b.dtb" >> sdcard/boot/firmware/config.txt    // If you have BCM2836 change "bcm2837-rpi-3-b.dtb" to "bcm2836-rpi-2-b.dtb".
+18.4 # echo "kernel=vmlinuz-$(readlink sdcard/initrd.img | grep initrd.img | cut -d "-" -f2,3)-arm64" >> sdcard/boot/firmware/config.txt    // If you use armhf change arm64 to armmp
+18.5 # echo "initramfs initrd.img-$(readlink sdcard/initrd.img | grep initrd.img | cut -d "-" -f2,3)-arm64 followkernel" >> sdcard/boot/firmware/config.txt // If you use armhf change arm64 to armmp
+18.6 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
+18.7 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup.dat
+18.8 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_cd.dat
+18.9 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_db.dat
+18.10 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_x.dat
+18.11 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/LICENCE.broadcom
+18.12 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start.elf
+18.13 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_cd.elf
+18.14 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_db.elf
+18.15 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_x.elf
+18.16 # sync
+
+19. Unmount MainSystem
+19.1 # sync
+19.2 # fuser -av sdcard
+19.3 # fuser -kv sdcard
+19.4 # umount -l sdcard/proc
+19.5 # umount sdcard/sys
+19.6 # umount sdcard/dev/pts
+19.7 # umount -v sdcard/boot/firmware
+19.8 # umount -v sdcard/boot
+19.9 # umount -vl sdcard
+19.10 # fuser -av sdcard
+19.11 # ls -l sdcard    // It should show an empty sdcard directory
+19.12 # rmdir sdcard
+19.13 # sync
+
+Alternative I: You have chosen arm64
+20. Stop PreSystem and InstallationSystem; Start MainSystem
+20.1 # shutdown -h now  // Stop PreSystem
+20.2 # exit
+20.3 Shutdown the InstallationSystem computer
+20.4 Disconnect the power to the rpi3
+20.5 Pull out the PreSystem sd card from the rpi3
+20.6 Pull out the MainSystem sd card from the usb holder and put the card in the rpi3
+20.7 Connect all the cables to rpi3
+20.8 Connect the power to rpi3
+Jump to "22. Check of installation"
+
+Alternative II: You have chosen armhf
+21. Stop PreSystem and Start MainSystem, do below.
+21.1 # exit
+21.2 $ exit
+21.3 Shutdown the system    // Stop PreSystem
+21.4 Disconnect the power to the rpi
+21.5 Pull out the PreSystem sd card from the rpi
+21.6 Pull out the MainSystem sd card from the usb holder and put the card in the rpi
+21.7 Connect the power to rpi
+Jump to "22. Check of installation"
+
+22. Check of installation
+22.1 # less /var/log/syslog // Learn little and check for fails
+22.2 # grep -i swap /var/log/syslog // If: swapon failed, Invalid argument, swapfile has holes -> fallocate may cause problems with F2FS or XFS. Using dd is more reliable, but slower -> Continue below.
+ 22.2.1 # swapon --show
+ 22.2.2 # cat /proc/swaps
+ 22.2.3 # /etc/init.d/dphys-swapfile restart    // One more try. If: swapfile has holes -> Continue below
+ 22.2.4 # /etc/init.d/dphys-swapfile stop
+ 22.2.5 # ls -l /var/swap
+ 22.2.6 # rm /var/swap
+ 22.2.7 # dd if=/dev/zero of=/var/swap count=1024 bs=1MiB
+ 22.2.8 # chmod 0600 /var/swap
+ 22.2.9 # ls -l /var/swap
+ 22.2.10 # mkswap /var/swap
+ 22.2.11 # /etc/init.d/dphys-swapfile start // No error messages
+ 22.2.12 # shutdown -r now
+ 22.2.13 # grep -i swap /var/log/syslog
+ 22.2.14 # swapon --show
+ 22.2.15 # cat /proc/swaps
+ 22.2.16 # free -h  // Mem: used:95M free:753M; Swap: used:0B used free:1G
+ 22.2.17 # less /var/log/syslog
+22.3 If everything is okay then, Welcome to Debian freedom!

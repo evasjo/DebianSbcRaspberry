@@ -1,0 +1,9 @@
+Widget.txt
+
+We have 1 GB memory + 1 GB swap.
+GPU memory = 416 MB // Because GPU memory cannot swap today
+CPU memory = 608 MB + 1024 MB   // Because CPU memory can swap
+
+# cat /proc/meminfo // Look for cma
+
+Every widget demands GPU memory.
