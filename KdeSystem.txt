@@ -107,14 +107,16 @@ lircd-0.10.0[534]: Error: Cannot glob /sys/class/rc/rc0/input[0-9]*/event[0-9]*
 14. Check of Bluetooth
  ToDo!
 
-15. Falcon web browser settings
+15. Falcon web browser
  15.1 Settings icon, Preferences, General, Launching, After launch, Restore session -> Open homepage
+ 15.2 To start Falkon: Click on Windows key (right of Ctrl key), write "fa" then Enter
 
-16. Falcon and Konqueror web browser crash  // You use Debian flavour "armhf"   // Debian bug 897925
- 16.1 $ falkon %u   // Failed to load /usr/bin/libGLESv2.so: /usr/bin/libGLESv2.so: cannot open shared object file: No such file or directory
- 16.2 # ln -s /usr/lib/arm-linux-gnueabihf/libGLESv2.so /usr/bin/libGLESv2.so   // You need to be aware of this link and remove the link when the bug is fixed
- 16.3 # ln -s /usr/lib/arm-linux-gnueabihf/libEGL.so /usr/bin/libEGL.so // You need to be aware of this link and remove the link when the bug is fixed
- 16.4 $ falkon %u   // It works
- 
-17. Shutdown
+16. Konqueror web browser check
+ 16.1 # ps -A konqueror   // Check up if konqueror is active althought it should not.
+ 16.2 # kill konqueror    // If active and no konqueror window in KDE
+
+17. Mount a Device
+17.1 Click the icon "Most Recent Device" down to the right. Click the arrow down icon and you will get arrow up icon i.e. the device is mounted.
+
+18. Shutdown
  Shutdown and let it use the 30 seconds to shutdown i.e. do not click OK.

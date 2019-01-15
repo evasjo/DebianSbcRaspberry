@@ -1,0 +1,133 @@
+Openseamap.txt
+
+
+Problem: 2 Port-hand Lateral (red) Spar mark are missing in in OpenSeaMap, where we are driving our boat.
+
+There are lateral marks and catedral marks. I prefer catedral marks in the sea (you do not need a map to navigate as with lateral marks).
+
+
+1. Theory
+Coordinate formats:	// https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
+ a) degrees minutes seconds :	40° 26′ 46″ N 79° 58′ 56″ W
+ b) degrees decimal minutes:	40° 26.767′ N 79° 58.933′ W
+ c) decimal degrees:		40.446° N 79.982° W		// In my mind, very good. This is like euro and cent.
+There are 60 minutes in a degree and 60 seconds in a minute. Therefore, to convert from a degrees minutes seconds format to a decimal degrees format, one may use the formula
+ decimal degrees = degrees + minutes/60 + seconds/3600
+
+One more clarification, how many degrees are in a hour?
+Answers: 360 degrees ÷ 24 hours = 15 degrees per hour. Each time zone covers 15 degrees of longitude.
+Obviously: 1 hour = 15 degrees longitud, 1 degree = 60 minutes, 1 minute = 60 seconds.
+
+This is a mix of degree and time and also distance, when someone made the system for the globe. If everyone should use the "decimal degrees" format above, we should not need to care about this theory.
+
+1. Boat GPS:
+Finland has its own coordinate system (or Geodetic Datum) ETRS89-TM35FIN, but a seaman told there is only WGS84 in the world. I think the continental drift is in most use-cases of no real importance . GPS and mobile phones use WGS84. World Geodetic System "WGS84" is an international standard of reference coordinate system.
+1.1 Settings in boat navigation system:
+ Glosnass	// Old: Glosnass
+ Waas/Egnos	// Old: Waas/Egnos
+ WGS84		// Old: Ord Srvy GB
+1.2 We drove the boat as near as possible to the seamarks and I notified the positions. Do also notify the name of the seamark, which I forgot.
+First Port-hand Lateral (red) Spar mark, converted to decimal degree which "JOSM" uses default below :
+ N 60° 19.501 -> 60 + (19.501/60) -> 60.325016  // Latitude
+ E 21°  5.366 -> 21 +  (5.366/60) -> 21.089433  // Longitude
+Second Port-hand Lateral (red) Spar mark, converted to decimal degree which "JOSM" uses default below:
+ N 60° 19.564 -> 60 + (19.564/60) -> 60.3260666 // Latitude
+ E 21° 4.458  -> 21 +  (4.458/60) -> 21.0743    // Longitude
+
+2.
+Use option 2a: Online tool which demand German language knowledge and an account in both FreeTonne and OpenstreetMap.
+or
+Use option 2b: The Java OpenStreetMap tool "JOSP" and OpenSeaMap-Editor (plugin) installation. You need an account in OpenstreetMap.
+I choose option 2b below (German language is bigger hurdle than Java for me).
+I also had to use flavour armhf instead of arm64, because GPU problem with JOSM in arm64 per today 2018-10-02.
+2a. http://freietonne.de/index.php?site=4       // I had to use browser Konqueror
+End.
+2b. OpenStreetMap tool "JOSP" and OpenSeaMap-Editor (plugin) installation.  // http://openseamap.org/index.php?id=josmdownload&L=1
+# apt-get install josm  // It included package default-jre, 22 packages 56 MB. I am in flavour sid (late josm version) and can download plugins inside the tool josm. If you are in other flavour, it is important that you have similar version of the tool and the plugins i.e. apt-get apt-get install josm josm-plugins.
+
+3. Create new account:
+http://www.openstreetmap.org/user/new
+
+4. Configure Java OpenStreetMap Editor "JOSM"
+4.1 Click Application Launcher, Applications, Education, Miscellaneous, Java OpenStreetMap Editor "JOSM"
+4.2 Click Edit, Preferences            // Register your account in JOSM
+ Click the 2nd Icon from the top ("Connection Settings for the OSM server")
+ Click button "Authorize now"
+ Username: 
+ Password:       // Subsequent data upload requests don't use your password any more.
+ Click button "Autohorize now"
+ Click button "Test Access Token"
+ Click button "Accept Access Token"
+ Click button OK
+4.3 Click Edit, Preferences
+ Click the 4th Icon from the top ("Configure available plugins")
+ If you do not see a list of available plugins, click Download button.
+ Scroll all the way down to "SeaMapEditor"   // If you see 2, choose the latest version.
+ Click the check box and then click OK
+ Click Restart button in the pop up window // It suggested it to take effect
+4.4 Click the Preferences button (Preferences dialog for global settings) in the toolbar
+ Click the 9th Icon from the top ("Remote control feature")
+ Click the check box "Enable remote control" and then click OK.
+4.5 Click Edit, Preferences
+ Click the 3rd Icon from the top "Settings for the map projection and data interpretation"
+ Click 1st tab "Map Projection"          // Notify this is about projection system and not coordinate system. OpenStreetMap, OpenSeaMap and Google Maps use WGS84 as coordinate system.
+  It shows Projection method: Mercator    // OpenStreetMap, OpenSeaMap and Google Maps use Meracator (Greenland and Africa has roughly the same size here) as projection system (to project a globe to 2-dimensional).
+  It shows Projection code: EPSG:3857     // https://wiki.openstreetmap.org/wiki/EPSG:3857
+ Click the 3rd tab "Tagging Presets".
+  Select the preset "Seamarks".   // I choose the first one of the 2 rows of "Seamarks"
+  Move it to the right column "Active Presets".
+ Click OK
+ Click Restart button in the pop up window // It suggested it to take effect
+
+5. Edit OpenSeaMap  // https://wiki.openstreetmap.org/wiki/JOSM/Basic_editing
+5.1 Start Java OpenStreetMap Editor "JOSM" if it is not started.
+5.2 Click icon "Download map data from a server of your choice" in the toolbar.
+5.3 Use right mouse button and wheel. Draw the area and click button Download     // (If you like you can use Browser OpenSeaMap, Edit (OpenSeaMap toolbar), Map with JOSM Remote) // After downloaded, you will see black background and under Layers up to right you will have "Data Layer 1")
+5.4 Click Select button (Select, move, scale and rotate objects) (the first one, hand icon) in the vertical toolbar on the left side  // (The vi editor has 2 modes: command mode and insert mode.) The JOSM has 2 main modes: Select and Add
+5.5 Draw the area within the seamarks should be.
+5.6 Click Add button (Draw nodes) (the second one, yellow diagonal line) in the vertical toolbar on the left side
+5.6 Double click when the position is Latitude: 60.325016 and Longitude:21.089433     // See Status bar down to left  // Position taken from the above // I looked in file later and I got Latitude: 60.32501985316 and Longitude:21.08943016903
+5.7 Click Presets, Seamarks, "Buoys, Beacons, Notices", Buoys and Floats (Q20-Q71), IALA Lateral Buoys, IALA-A Lateral Buoys, Port Hand Buoy
+ Shape: spar
+ Name:  seamark:name     // If you did not notice any name when you where there with boat, do not write anything here.
+ Click button "Apply Preset"
+5.8 Double click when the position is Latitude: 60.3260666 and Longitude:21.0743     // See Status bar down to left  // Position taken from the above // I looked in file later and I got Latitude: 60.32607341511 and Longitude:21.07431061827
+5.9 Click Presets, Seamarks, "Buoys, Beacons, Notices", Buoys and Floats (Q20-Q71), IALA Lateral Buoys, IALA-A Lateral Buoys, Port Hand Buoy
+ Shape: spar
+ Name:  seamark:name     // If you did not notice any name when you where there with boat, do not write anything here.
+ Click button "Apply Preset"
+5.10 Click File, Save As
+ File Name: Dragskar     // Somewhere in your directory structure    // Look inte the file how it was in Xml after this.
+ Click button Save
+
+6. Double check your positions.
+6.1 Are they right?
+6.2 Have you done calculation and written right coordinates after that?
+6.3 Check the content the file you saved.
+6.4 Is it logic that the position are where they are, compared with others?
+
+7. Upload your data // https://wiki.openstreetmap.org/wiki/JOSM/Basic_editing  // https://josm.openstreetmap.de/wiki/Help/Action/Upload
+7.1 Start Java OpenStreetMap Editor "JOSM" if it is not started.
+7.2 Click File, Open Recent, Dragskar.osm (for me)
+7.3 Click 4th button "Upload all changes in the active Data layer to the OSM server" (shows green arrow up)  in the toolbar.
+ It shows 2 objects to add (2 nodes)
+ Provide a brief comment for the changes you are uploading: 2 Port-hand Lateral (red) Spar mark are missing in in OpenSeaMap, where we are driving our boat. I notified the positions with boat GPS "WGS84" and added them here.
+ Specify the source for the changes: survey // I choose this
+ Click button "Upload Changes"
+ It shows uploaded successfullly.   // A one time flashing message
+7.4 Click File, Exit
+
+8. Check in browser Falkon that OpenSeaMap is updated. It is updated 5-10 minutes after for me.
+
+9. Click Start, Applications, Education, Science, Virtual Globe KDE Marble
+9.1 Look down to left in "Map View" if you see OpenSeaMap, if not go next row here.
+9.2 Click File, Download Maps. Choose OpenSeaMap and clik button Install, click button Open, click button Close.
+9.3 Look down to left in "Map View", click on OpenSeaMap.
+9.4 Turn around the globe to the right to your position. Zoom out.
+9.5 You should see your inserted seamarks here also.
+
+10. FAQ
+10.1 What is the difference between OpenStreetMap and OpenSeaMap?
+10.1 The datebase is the same. The base layer with shores and islands are the same. The only diffference is probably the tags which is probably the same as layer. If you are in OpenStreetMap and can open layer Seamark then it is called OpenSeaMap!
+10.2 How did my upload go to the maps in OpenSeaMap and not OpenStreetMap?
+10.2 The tags begin with "seamark:" in my file Dragskar.osm. This means that you have a base layer and choose to add the layer SeaMark.

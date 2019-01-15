@@ -1,0 +1,135 @@
+Bookmarks.txt
+
+
+Handling of Bookmarks to be equal in home, job and mobile phone.
+
+
+Falkon bookmarks are stored in a SQLite database.
+Multi-level bookmarks are fully supported in Falkon.
+
+Policy to use address bar:
+1. Very frequent use and you remember the beginning of the URL.
+
+Policy to use bookmarks:
+1. You need it frequently or fast or it is very very important.
+2. No double information (weather forecast can be excepted)
+3. Only what you need not what you want.
+4. Order bookmarks and folder, how frequently you use and how important it is.
+5. Bookmarks to vector based maps should be used and not raster maps.
+6. Less is more.
+
+We will use Falkon browser as source. Job computer (Firefox) and mobile phone as target.
+
+You can use bookmarks.html as a template, see bookmarks.html in this project.
+
+1. Falkon (at home)
+
+1.1 Falkon (import file at home)    // You have a fine organized Bookmarks file
+1.1.1 Click Main Menu icon in the toolbar
+1.1.2 Click on Bookmarks, then click on "Organize Bookmarks".
+1.1.3 Click "Import and Export" drop down list, then click "Import Bookmarks".
+1.1.4 Choose what Bookmarks file you have. If you have a html file and choose "Html file" and click Next button.
+1.1.5 Chose the "bookmarks.html" and click Next button.
+1.1.6 Look on the structure and if it is okay click on the Finish button.
+1.1.7 Under "Unsorted Bookmarks", "HTML import", "Bookmarks Menu"; Drag MyBookmarks to the upper "BookMarks Menu"
+
+1.2 Falkon (create file at home)    // You do not have a fine organized Bookmarks file
+
+1.2.1 Fix folders
+Settings button, Bookmarks, Organize Bookmarks,
+Right click on "Bookmarks Menu" and choose New Folder and Title insert "MyBookmarks"
+Right click on "MyBookmarks" and choose "New Folder" 10 times
+Insert in Title field the folder names below:
+IT
+Dictionary
+SearchEngine
+Wiki
+Weather
+Map
+Finance
+Secondhand
+Law
+Traffic
+
+1.2.2 Populate the folders with URL:s
+1.2.2.1 In the address bar insert (the first) URL: http://lxer.com/
+1.2.2.2 Settings button, Bookmarks, Bookmark This Page, Choose IT
+1.2.2.3 Return to 2.1 with all other URL:s.
+
+1.2.3 Export the Bookmarks
+1.2.3.1 Settings button, Bookmarks, Organize Bookmarks, Import and Export drop down list, choose Export Bookmarks, click on Choose for directory for you bookmarks.html.
+1.2.3.2 Copy bookmarks.html to your backup device.
+1.2.3.3 Write in the address bar the beginng of one of the bookmarks and you will see an icon to the right that show it is an bookmark.
+
+
+2. Firefox (import file at job)
+
+2.1 Get multi-level bookmarks support
+2.1.1 Click on the library icon on your Firefox toolbar.
+2.1.2 Click on Bookmarks, then click on Bookmarking Tools.
+2.1.3 Click on Add Bookmarks Menu to the Toolbar.
+2.1.4 A Bookmarks Menu  Bookmark Menu icon (star on tray) icon will be added to your toolbar.
+2.1.5 Click on the new Bookmarks Menu icon and you have multi-level bookmarks support.
+
+2.2 Preimport cleaning
+Click on New icon.
+Click on "Show All Bookmarks". I have now a bigger tree:
+History
+Downloads
+Tags
+All Bookmarks
+ Bookmarks Toolbar
+  Most Visited
+ Bookmarks Menu
+  Recent Tags       // Empy Smart Bookmark, I deleted this.
+  Mozilla firefox   // Empy Bookmark, I deleted this.
+  Recently Bookmarked
+  Recent Tags       // Empy Smart Bookmark, I deleted this.
+  Dictionary        // I deleted this.
+  General           // I deleted this.
+  Mozilla Firefox   // Empy Bookmark, I deleted this.
+  Weather           // I deleted this.
+  Bookmarks Toolbar // Smart Bookmark which point to the same Bookmarks as above, I deleted this "only the smart folder" not the Bookmarks in it.
+  Unsorted Bookmarks
+   Lavabit..        // I deleted this.
+   UTF-8...         // I deleted this.
+ Other Bookmarks    // The "Other Bookmarks" folder is used to store bookmarks that you create by clicking the star on the Navigation Toolbar.
+   ...              // I deleted all under "Other Bookmarks"
+Close the window.
+
+2.3 Import Bookmarks    // Html bookmarks file are appended to existing bookmarks Firefox.
+Click on New icon.
+Click on "Show All Bookmarks"
+Click the drop down "Import and Backup" and choose "Import Bookmarks from HTML"
+Chose the "bookmarks.html" I have exported from Falkon
+Close the window.
+
+2.4 Postimport cleaning
+Click on New icon.
+Click on "Show All Bookmarks"
+2.4.1
+I have now 2 levels of
+BookMarks Menu
+ BookMarks Menu
+  MyBookmarks
+Drag MyBookmarks to the upper "BookMarks Menu"
+Delete the under "BookMarks Menu" which is empty now.
+2.4.2
+I got these 2 extra folders under "BookMarks Menu" after Import.
+BookMarks Menu
+ Bookmarks Toolbar  // I deleted this (I already have this on a level up)
+ Unsorted Bookmarks // I have 2 of this. I deleted the one which came after Import
+Close the window.
+2.4.3 Write in the address bar the beginng of one of the bookmarks and you will see an icon to the right that show it is an bookmark.
+
+
+3. Mobile Phone (Sailfish OS)
+
+3.1 Attach to a mail Falkon exported bookmarks.html to your webmail in mobile phone. Open the mail and the attached bookmarks.html in your phone.
+3.1.1 Touch the link
+3.1.2 Star the link // Bookmark it
+3.1.3 Back button to the bookmarks.html
+3.1.3 Return to 3.1.1 with all other URL:s.
+
+
+You have now control of your Bookmarks!

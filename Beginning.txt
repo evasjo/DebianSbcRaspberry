@@ -31,7 +31,7 @@ Micro SD card (Class 10) for MainSystem // Required // My is 64GB "a fast card"
 Usb Sd card holder (reader)         // Required
 120 GB Usb Flash Data/Backup        // Optional // Data/Backup, rsync between and alternate
 120 GB Usb Flash Data/Backup        // Optional // Data/Backup, rsync between and alternate
-Usb Audio device                    // Optional	// See photo of my audio device, 20180520_205531.jpg
+HDMI to VGA and analog audio splitter // Optional	// See photo of my device, 20190106_181538.jpg
 Headphones or speakers              // Optional
 Usb hub                             // Optional // My is 7 ports with Multiple Transaction Translator (MTT)
 
