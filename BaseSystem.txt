@@ -5,21 +5,22 @@ $ = regular non-privileged user
 // = notification for you to do the installation
 Copy the text from the first character after "$" or "#" sign and before "//", paste in a console in the rpi.
 Rows begin with initial space for better readability and you should not copy the inital space. You should copy from the first character.
-Be on alert with text string: sdx, xx, xxxxx, xxyy, yyyyy, Xxxxx, Yyyyy // They need to be replaced
+Be on alert with text string: sdX, xx, xxxxx, yyyyy, Xxxxx, Yyyyy // They need to be replaced
 
 Alternative I: You want arm64 i.e you have SoC BCM2837
 1. Install PreSystem with your computer
 1.1 Start Terminal (cli interface)
-1.2. $ wget https://people.debian.org/~stapelberg/raspberrypi3/2018-01-08/2018-01-08-raspberry-pi-3-buster-PREVIEW.img.xz   // Look for the latest: https://wiki.debian.org/RaspberryPi3 and https://people.debian.org/~stapelberg/raspberrypi3
-1.3. $ ls -l /dev/disk/by-label
-1.4. $ cat /proc/partitions | grep sd
-1.5. Put the empty PreSystem sd card in a usb holder and in a usb slot in the computer.
-1.6. $ ls -l /dev/disk/by-label // Check with mount command, if mounted do umount.
-1.7. $ cat /proc/partitions | grep sd   // From the result, identify the card for the below sdx change. Very important that you choose the right card below.
-1.8. $ su root
-1.9. # xzcat 2018-01-08-raspberry-pi-3-buster-PREVIEW.img.xz | dd of=/dev/sdx bs=64k oflag=dsync status=progress    // "sdx", change the x to the very right character
-1.10. # sync
-1.11. # exit    // exit su
+1.2 $ wget https://people.debian.org/~gwolf/raspberrypi3/20181204/20181204-raspberry-pi-3-buster-PREVIEW.img.xz   // Look for the latest: https://wiki.debian.org/RaspberryPi3
+1.2.1 $ sha256sum 20181204-raspberry-pi-3-buster-PREVIEW.img.xz
+1.3 $ ls -l /dev/disk/by-label
+1.4 $ cat /proc/partitions | grep sd
+1.5 Put the empty PreSystem sd card in a usb holder and in a usb slot in the computer.
+1.6 $ ls -l /dev/disk/by-label // Check with mount command, if mounted do umount.
+1.7 $ cat /proc/partitions | grep sd   // From the result, identify the card for the below sdX change. Very important that you choose the right card below.
+1.8 $ su root
+1.9 # xzcat 20181204-raspberry-pi-3-buster-PREVIEW.img.xz | dd of=/dev/sdX bs=64k oflag=dsync status=progress    // "sdX", change the X to the very right character
+1.10 # sync
+1.11 # exit    // exit su
 
 2. PreSystem
 2.1 Pull out the PreSystem sd card from the usb holder and put the card in the rpi3
@@ -35,17 +36,15 @@ Alternative II: You want armhf i.e you have SoC BCM2836 or BCM2837
 1.1 Start Terminal (cli interface)
 1.2 Download "Raspbian Stretch with desktop" (Torrent) from https://www.raspberrypi.org/downloads/raspbian/
 1.2.1 $ sha256sum "FileName".zip
-1.2.1 $ unzip "FileName".zip
-1.3. $ ls -l /dev/disk/by-label
-1.4. $ cat /proc/partitions | grep sd
-1.5. Put the empty PreSystem sd card in a usb holder and in a usb slot in the computer.
-1.6. $ ls -l /dev/disk/by-label // Check with mount command, if mounted do umount.
-1.7. $ cat /proc/partitions | grep sd   // From the result, identify the card for the below sdx change. Very important that you choose the right card below.
-1.8. $ su root
-1.9. # xzcat 2018-01-08-raspberry-pi-3-buster-PREVIEW.img.xz | dd of=/dev/sdx bs=64k oflag=dsync status=progress    // "sdx", change the x to the very right character
-1.9. # dd if="FileName".zip of=/dev/sdx bs=1048576  // Change "FileName" to right filename. "sdx", change the x to the very right character
-1.10. # sync
-1.11. # exit    // exit su
+1.3 $ ls -l /dev/disk/by-label
+1.4 $ cat /proc/partitions | grep sd
+1.5 Put the empty PreSystem sd card in a usb holder and in a usb slot in the computer.
+1.6 $ ls -l /dev/disk/by-label // Check with mount command, if mounted do umount.
+1.7 $ cat /proc/partitions | grep sd   // From the result, identify the card for the below sdX change. Very important that you choose the right card below.
+1.8 $ su root
+1.9 # unzip -p "FileName".zip | dd of=/dev/sdX bs=4M conv=fsync  // Change "FileName" to right filename. "sdX", change the X to the very right character
+1.10 # sync
+1.11 # exit    // exit su
 
 2. PreSystem
 2.1 Pull out the PreSystem sd card from the usb holder and put the card in the rpi
@@ -79,16 +78,16 @@ Jump to "3. Install necessary packages in PreSystem"
   3.6.2.10 # cd ..
 
 4. MainSystem sd card (empty card=no partitions)
-4.1. # ls -l /dev/disk/by-label
-4.2. # cat /proc/partitions | grep sd
-4.3. Put the empty MainSystem sd card in a usb holder and in a usb slot in the rpi.
-4.4. # ls -l /dev/disk/by-label // The card should not be seen. If you see partitions you need to delete them in next chapter (3). Unmount the partitions.
-4.5. # cat /proc/partitions | grep sd   // From the result, identify the card for the below sdx change. Very important that you choose the right card below.
-4.6. # mount
-4.6. # umount /dev/sdx9 // Unmount MainSystem sd card partitions if mounted // Change the "x" to the very right character and "9" to right numbers
+4.1 # ls -l /dev/disk/by-label
+4.2 # cat /proc/partitions | grep sd
+4.3 Put the empty MainSystem sd card in a usb holder and in a usb slot in the rpi.
+4.4 # ls -l /dev/disk/by-label // The card should not be seen. If you see partitions you need to delete them in next chapter (3). Unmount the partitions.
+4.5 # cat /proc/partitions | grep sd   // From the result, identify the card for the below sdX change. Very important that you choose the right card below.
+4.6 # mount
+4.6 # umount /dev/sdX9 // Unmount MainSystem sd card partitions if mounted // Change the "X" to the very right character and "9" to right numbers
 
 5. Create partitions    // The comma "," means Enter command in this chapter, do not copy paste where you find comma character.
-5a. # fdisk /dev/sdx    // Change the "x" to the very right character
+5a. # fdisk /dev/sdX    // Change the "X" to the very right character
 5b. p   // Print partitions
 5c. d,, // Delete all partitions if there are
 5d. p   // Print partitions. You should not have any partitions when you go to the next row.
@@ -99,22 +98,22 @@ Jump to "3. Install necessary packages in PreSystem"
 5i. w   // Write everything to the sd card and exit
 
 6. Make filesystems
-6.1. # mkdosfs -n FIRMWARE /dev/sdx1 && sync    // Change the "x" to the very right character
-6.2. # mkfs.ext2 -L boot /dev/sdx2 && sync  // Change the "x" to the very right character
-6.3. # ./f2fs-tools/mkfs/mkfs.f2fs -l root /dev/sdx3 && sync    // Change the "x" to the very right character   // Not a manual install of f2fs-tools above, do: # mkfs.f2fs -l root /dev/sdx3 && sync
+6.1 # mkdosfs -n FIRMWARE /dev/sdX1 && sync    // Change the "X" to the very right character
+6.2 # mkfs.ext2 -L boot /dev/sdX2 && sync  // Change the "X" to the very right character
+6.3 # ./f2fs-tools/mkfs/mkfs.f2fs -l root /dev/sdX3 && sync    // Change the "X" to the very right character   // Not a manual install of f2fs-tools above, do: # mkfs.f2fs -l root /dev/sdX3 && sync
 
 7. Mount root
 7.1 # pwd
 7.2 # mkdir -v sdcard
-7.3 # mount -v -t f2fs -o sync /dev/sdx3 sdcard // Change the "x" to the very right character
+7.3 # mount -v -t f2fs -o sync /dev/sdX3 sdcard // Change the "X" to the very right character
 
 8. Install Debian base system to your sd card
 8.1 # debootstrap --arch=arm64 --include=kbd,locales,keyboard-configuration,console-setup,dphys-swapfile sid sdcard http://ftp.xx.debian.org/debian && sync // Change "xx" to right country code from http://www.debian.org/mirror/list // If you use armhf change arm64 to armhf   // If you use other release than sid change sid // Duration 40-60 minutes
 
 9. Mount all the rest
-9.1 # mount -v -t ext2 -o sync /dev/sdx2 sdcard/boot    // Change the "x" to the very right character
+9.1 # mount -v -t ext2 -o sync /dev/sdX2 sdcard/boot    // Change the "X" to the very right character
 9.2 # mkdir -v sdcard/boot/firmware
-9.3 # mount -v -t vfat -o sync /dev/sdx1 sdcard/boot/firmware   // Change the "x" to the very right character
+9.3 # mount -v -t vfat -o sync /dev/sdX1 sdcard/boot/firmware   // Change the "X" to the very right character
 9.4 # mount -v proc sdcard/proc -t proc
 9.5 # mount -v sysfs sdcard/sys -t sysfs
 9.6 # mount -v --bind /dev/pts sdcard/dev/pts
@@ -138,8 +137,6 @@ Jump to "3. Install necessary packages in PreSystem"
  /dev/mmcblk0p1  /boot/firmware  vfat    noauto,noatime    0       2
  /dev/mmcblk0p2  /boot           ext2    defaults,noatime  0       0
  /dev/mmcblk0p3  /               f2fs    defaults,noatime  0       0
- /dev/sda1       /xxyy           f2fs    defaults,noatime  0       0    // Optional. Usb memory for data. xx = 2 of you first letters in firstname, yy = 2 of you first letters in lastname
-12.2 # mkdir sdcard/xxyy    // Optional. Usb memory for data. xx = 2 of you first letters in firstname, yy = 2 of you first letters in lastname
 
 13. Diverse settings
 13.1 # nano -w sdcard/etc/timezone  // The computer use UTC and we use another in Gui later
@@ -179,11 +176,11 @@ Jump to "3. Install necessary packages in PreSystem"
 16.6 # chroot sdcard update-initramfs -u
 16.7 # cp -p sdcard/boot/vmlinuz-$(readlink sdcard/vmlinuz | grep vmlinuz | cut -d "-" -f2,3)-arm64 sdcard/boot/firmware/   // If you use armhf change arm64 to armmp
 16.8 # cp -p sdcard/boot/initrd.img-$(readlink sdcard/initrd.img | grep initrd.img | cut -d "-" -f2,3)-arm64 sdcard/boot/firmware/  // If you use armhf change arm64 to armmp
-16.9 # cp -p sdcard/usr/lib/linux-image-$(readlink sdcard/vmlinuz | grep vmlinuz | cut -d "-" -f2,3)-arm64/broadcom/bcm2837-rpi-3-b.dtb sdcard/boot/firmware/   // If you use armhf change arm64 to armmp   // If you use armhf and if you have BCM2837, change "broadcom/bcm2837-rpi-3-b.dtb" to "bcm2837-rpi-3-b.dtb". If you use armhf and if you have BCM2836, change "broadcom/bcm2837-rpi-3-b.dtb" to "bcm2836-rpi-2-b.dtb".
+16.9 # cp -p sdcard/usr/lib/linux-image-$(readlink sdcard/vmlinuz | grep vmlinuz | cut -d "-" -f2,3)-arm64/broadcom/bcm2837-rpi-3-b.dtb sdcard/boot/firmware/   // If you have plus card change "bcm2837-rpi-3-b.dtb" to "bcm2837-rpi-3-b-plus.dtb".    // If you use armhf change arm64 to armmp.  // If you use armhf and if you have BCM2837, change "broadcom/bcm2837-rpi-3-b.dtb" to "bcm2837-rpi-3-b.dtb" or "bcm2837-rpi-3-b-plus.dtb".  // If you use armhf and if you have BCM2836, change "broadcom/bcm2837-rpi-3-b.dtb" to "bcm2836-rpi-2-b.dtb".
 
 17. Install diverse
 17.1 # chroot sdcard apt-get install dbus fake-hwclock psmisc
-17.2 # chroot sdcard apt-get install ntp mlocate rsync
+17.2 # chroot sdcard apt-get install ntp mlocate rsync wget
 17.3 # chroot sdcard apt-get install f2fs-tools
 17.4 # chroot sdcard apt-get install firmware-brcm80211 // The built-in bluetooth/wlan chip for rpi3    // Do not install if you do not have the built-in bluetooth/wlan chip for rpi3
 17.5 # cp -p /lib/firmware/brcm/brcmfmac43430-sdio.txt sdcard/lib/firmware/brcm/brcmfmac43430-sdio.txt  // Board-specific configuration chip for rpi3   // Do not cp if you do not have the built-in bluetooth/wlan chip for rpi3
@@ -192,22 +189,23 @@ Jump to "3. Install necessary packages in PreSystem"
 17.8 # sync
 
 18. Install firmware
-18.1 # echo 'console=tty0 console=${serial} root=/dev/mmcblk0p3 rootfstype=f2fs elevator=deadline fsck.repair=yes rootwait cma=416M' > sdcard/boot/firmware/cmdline.txt
+18.1 # echo 'dwc_otg.lpm_enable=0 console=tty0 console=${serial} root=/dev/mmcblk0p3 rootfstype=f2fs elevator=deadline fsck.repair=yes rootwait cma=416M' > sdcard/boot/firmware/cmdline.txt
 18.2 # echo "arm_control=0x200" > sdcard/boot/firmware/config.txt   // This row only if you use arm64
-18.3 # echo "device_tree=bcm2837-rpi-3-b.dtb" >> sdcard/boot/firmware/config.txt    // If you have BCM2836 change "bcm2837-rpi-3-b.dtb" to "bcm2836-rpi-2-b.dtb".
+18.3 # echo "device_tree=bcm2837-rpi-3-b.dtb" >> sdcard/boot/firmware/config.txt    // If you have plus card change "bcm2837-rpi-3-b.dtb" to "bcm2837-rpi-3-b-plus.dtb".    // If you have BCM2836 change "bcm2837-rpi-3-b.dtb" to "bcm2836-rpi-2-b.dtb".
 18.4 # echo "kernel=vmlinuz-$(readlink sdcard/initrd.img | grep initrd.img | cut -d "-" -f2,3)-arm64" >> sdcard/boot/firmware/config.txt    // If you use armhf change arm64 to armmp
 18.5 # echo "initramfs initrd.img-$(readlink sdcard/initrd.img | grep initrd.img | cut -d "-" -f2,3)-arm64 followkernel" >> sdcard/boot/firmware/config.txt // If you use armhf change arm64 to armmp
-18.6 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
-18.7 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup.dat
-18.8 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_cd.dat
-18.9 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_db.dat
-18.10 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_x.dat
-18.11 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/LICENCE.broadcom
-18.12 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start.elf
-18.13 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_cd.elf
-18.14 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_db.elf
-18.15 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_x.elf
-18.16 # sync
+18.6 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/COPYING.linux
+18.7 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/LICENCE.broadcom
+18.8 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/bootcode.bin
+18.9 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup.dat
+18.10 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_cd.dat
+18.11 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_db.dat
+18.12 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/fixup_x.dat
+18.13 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start.elf
+18.14 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_cd.elf
+18.15 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_db.elf
+18.16 # wget -P sdcard/boot/firmware/ -N https://github.com/raspberrypi/firmware/raw/master/boot/start_x.elf
+18.17 # sync
 
 19. Unmount MainSystem
 19.1 # sync
