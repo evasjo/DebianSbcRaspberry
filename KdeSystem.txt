@@ -70,11 +70,19 @@ lircd-0.10.0[534]: Error: Cannot glob /sys/class/rc/rc0/input[0-9]*/event[0-9]*
 10.3 $ xrandr   // Result: 1920x1080     60.00*+
 10.4 $ glxgears -info   // Result: 301 frames in 5.0 seconds = 60.019 FPS
 
-11. Check of unattended-upgrades
-11.1 unattended-upgrades a) demand to much resources, and b) I want to handle upgrades because I am in sid release
-11.2 # nano -w /etc/apt/apt.conf.d/20auto-upgrades
- APT::Periodic::Update-Package-Lists "0";   // Changed 1 to 0
- APT::Periodic::Unattended-Upgrade "0"; // Changed 1 to 0
+11. Automatic update    // a) demand too much resources, and b) I want to handle upgrades because I am in sid release
+11.1 Start, Application, System, "Software Center (Discover)", Settings, Software Sources, dropdown list "Check for updates" choose None, dropdown list "Automatically install" choose None.   //  "Software Center (Discover)" is the graphical front-end to PackageKit (Back-end is Advanced Packaging Tool (APT)).
+11.2 Manually   // I never got the dropdown list above and I used this step.
+ 11.2.1 Stop upgrade 
+  # nano -w /etc/apt/apt.conf.d/20auto-upgrades
+   APT::Periodic::Update-Package-Lists "0";   // Changed 1 to 0
+   APT::Periodic::Unattended-Upgrade "0"; // Changed 1 to 0
+ 11.2.2 Stop update (download)
+  # systemctl list-unit-files --type=service|grep packagekit   // I never got the dropdown list above and I used this step.
+   packagekit-offline-update.service          static   
+   packagekit.service                         static 
+  # systemctl mask packagekit.service   //  you can always go back with command "systemctl unmask packagekit.service" if you want to use "Software Center (Discover)"
+   Created symlink /etc/systemd/system/packagekit.service → /dev/null.
 
 12. Check of Lan network
 12.1 Start, Application, Settings, System Settings, Network, Connections
@@ -108,12 +116,13 @@ lircd-0.10.0[534]: Error: Cannot glob /sys/class/rc/rc0/input[0-9]*/event[0-9]*
  ToDo!
 
 15. Falcon web browser
- 15.1 Settings icon, Preferences, General, Launching, After launch, Restore session -> Open homepage
- 15.2 To start Falkon: Click on Windows key (right of Ctrl key), write "fa" then Enter
+15.1 Settings icon, Preferences, General, Launching, After launch, Restore session -> Open homepage // "Restore session" too slow in Raspberry Pi.
+15.2 Settings icon, Preferences, General, Launching, On new tab, Open speed dial -> Open blank tab   // "Open speed dial" too slow in Raspberry Pi.
+15.3 To start Falkon: Click on Windows key (right of Ctrl key), write "fa" then Enter
 
 16. Konqueror web browser check
- 16.1 # ps -A konqueror   // Check up if konqueror is active althought it should not.
- 16.2 # kill konqueror    // If active and no konqueror window in KDE
+16.1 # ps -A konqueror   // Check up if konqueror is active althought it should not.
+16.2 # kill konqueror    // If active and no konqueror window in KDE
 
 17. Mount a Device
 17.1 Click the icon "Most Recent Device" down to the right. Click the arrow down icon and you will get arrow up icon i.e. the device is mounted.
